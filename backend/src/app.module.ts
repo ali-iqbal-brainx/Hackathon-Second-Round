@@ -3,7 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { configLoaders } from './config/index.js';
 import { DatabaseModule } from './database/database.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { BriefModule } from './modules/brief/brief.module.js';
 import { UsersModule } from './modules/users/users.module.js';
+import { OpenAiModule } from './openai/openai.module.js';
 
 @Module({
   imports: [
@@ -13,8 +15,10 @@ import { UsersModule } from './modules/users/users.module.js';
       load: configLoaders,
     }),
     DatabaseModule,
+    OpenAiModule,
     AuthModule,
     UsersModule,
+    BriefModule,
   ],
 })
 export class AppModule {}
