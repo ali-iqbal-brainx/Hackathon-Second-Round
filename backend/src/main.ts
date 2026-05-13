@@ -1,8 +1,14 @@
+import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+  const configService = app.get(ConfigService);
+  const port = configService.getOrThrow<number>('app.port');
+  await app.listen(port);
+  logger.log(`HTTP server listening on port ${port}`);
 }
-bootstrap();
+void bootstrap();
