@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# BriefAI — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React client for **Brief to Jira-style tickets**: upload briefs, answer AI clarifying questions, review generated tickets, export PDFs, and browse history.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React** 19 + **TypeScript**
+- **Vite** 8
+- **Tailwind CSS** 4
+- **React Router** 7
+- **TanStack React Query** 5
+- **Axios**
+- **jsPDF** (ticket PDF export)
+- **react-hot-toast** (notifications)
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 20+ (LTS recommended)
+- Backend API running (see [../backend/README.md](../backend/README.md)) — default base URL assumes port **4000** and path **`/api/v1`**.
 
-## Expanding the ESLint configuration
+## Environment variables
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Copy the example file and point the app at your API:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Variable            | Description |
+|---------------------|-------------|
+| `VITE_API_URL`     | Full API root, e.g. `http://localhost:4000/api/v1` (**recommended**). |
+| `VITE_API_BASE_URL`| Optional fallback if `VITE_API_URL` is not set (same format). |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+If neither is set, the app defaults to `http://localhost:4000/api/v1`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Vite only exposes variables prefixed with `VITE_`. **Restart `npm run dev`** after changing `.env`.
+
+See [.env.example](.env.example) for a template. **Never commit `.env`** — it is gitignored.
+
+## Install and run
+
+```bash
+npm install
+npm run dev
 ```
+
+Then open the printed local URL (usually `http://localhost:5173`).
+
+Ensure the backend URL in `.env` matches where Nest is listening and includes the **`/api/v1`** prefix.
+
+## Scripts
+
+| Command           | Description |
+|-------------------|-------------|
+| `npm run dev`     | Vite dev server with HMR. |
+| `npm run build`   | Typecheck + production build to `dist/`. |
+| `npm run preview` | Serve the production build locally. |
+| `npm run lint`    | ESLint. |
+
+## Project layout (high level)
+
+- `src/config/` — routes, constants (including API base URL resolution)
+- `src/lib/` — Axios instance, React Query client
+- `src/features/brief/` — brief API, hooks, upload UI pieces, history card
+- `src/features/tickets/` — ticket types and ticket card UI
+- `src/shared/utils/` — shared helpers (e.g. PDF generation)
+- `src/pages/` — route-level screens
+- `src/router/` — `AppRouter`
+- `src/components/` — layout, error boundary, step indicator, etc.
+
+## License
+
+Private unless otherwise specified by the repository owner.
